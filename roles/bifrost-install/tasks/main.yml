@@ -36,7 +36,7 @@
   git:
     repo: https://git.openstack.org/openstack/bifrost.git
     dest: /usr/src/bifrost
-    version: master
+    version: "{{ bifrost_version }}"
 
 - name: Template group vars
   template:

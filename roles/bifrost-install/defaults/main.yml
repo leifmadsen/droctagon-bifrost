@@ -2,3 +2,4 @@
 ironic_db_password: ironic_welcome
 mysql_username: root
 mysql_password: mysql_welcome
+bifrost_version: "a59bbd79d517c0af46ec5a582146b46ae99a0a70"
