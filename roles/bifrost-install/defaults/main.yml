@@ -1,0 +1,4 @@
+---
+ironic_db_password: ironic_welcome
+mysql_username: root
+mysql_password: mysql_welcome
