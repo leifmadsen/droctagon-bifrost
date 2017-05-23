@@ -7,11 +7,11 @@ ironic_url: "http://{{ pxe_boot_server_ip }}:6385/"
 network_interface: "{{ pxe_boot_nic }}"
 
 # ironic_db_password ironic user password for rabbit
-ironic_db_password: aSecretPassword473z
+ironic_db_password: {{ ironic_db_password }}
 # mysql_username: Default mysql admin username
-mysql_username: root
+mysql_username: {{ mysql_username }}
 # mysql_password: Default mysql admin user password
-mysql_password:
+mysql_password: {{ mysql_password }}
 
 # The path to the SSH key to be utilized for testing and burn-in
 # to configuration drives. When set, it should be set in both baremetal
@@ -69,4 +69,12 @@ create_ipa_image: true
 # Dnsmasq default nameserver for clients. If not defined, this setting
 # will be ignored.
 # Default: undefined
-# dnsmasq_dns_servers: 8.8.8.8,8.8.4.4
+dnsmasq_dns_servers: 8.8.8.8,8.8.4.4
+dhcp_pool_start: {{ pxe_dhcp_start }}
+dhcp_pool_end: {{ pxe_dhcp_end }}
+
+# PXE Drivers
+enable_pxe_drivers: true
+pxe_drivers: "pxe_ipmitool"
+enabled_drivers: "agent_ipmitool"
+
