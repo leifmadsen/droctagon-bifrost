@@ -1,5 +1,5 @@
-bifrost ansible_host=192.168.1.108 ansible_ssh_user=root
+bifrost01 ansible_host=192.168.122.226 ansible_ssh_user=root
 
 # All groups under droctagon
 [bifrost]
-bifrost
+bifrost01

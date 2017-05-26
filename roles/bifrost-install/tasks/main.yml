@@ -19,6 +19,7 @@
 
 - name: Update time with ntp
   command: ntpdate pool.ntp.org
+  ignore_errors: true
 
 - name: Start and enable NTP daemon
   systemd:
@@ -57,10 +58,6 @@
     - localhost
     - target
 
-- name: Export VENV path for virtual environment setup
-  shell: >
-    export VENV=/opt/stack/bifrost
-
 - name: Run the env setup script
   shell: >
     bash /usr/src/bifrost/scripts/env-setup.sh
@@ -74,10 +71,9 @@
 
 - name: Annnnd! We run the installation playbook.
   shell: >
-    /root/.local/bin/ansible-playbook \
-      -e enable_venv=true \
-      -i inventory/target \
-      install.yaml
+    source /opt/stack/bifrost/bin/activate && \
+    source /usr/src/bifrost/env-vars && \
+    /root/.local/bin/ansible-playbook -i inventory/target install.yaml
   args:
     chdir: /usr/src/bifrost/playbooks
     creates: /etc/.bifrost-installed
