@@ -13,7 +13,9 @@
 
 - name: Start enrollment, enroll everything every time.
   shell: >
-    ansible-playbook -i inventory/bifrost_inventory.py enroll-dynamic.yaml
+    source /opt/stack/bifrost/bin/activate && \
+    source /usr/src/bifrost/env-vars && \
+    /opt/stack/bifrost/bin/ansible-playbook -i inventory/bifrost_inventory.py enroll-dynamic.yaml
   args:
     chdir: /usr/src/bifrost/playbooks
   environment: "{{ bifrost_env }}"
@@ -28,12 +30,12 @@
 #   debug:
 #     msg: "cd /usr/src/bifrost/playbooks && export BIFROST_INVENTORY_SOURCE= && ansible-playbook -vvvv -i inventory/bifrost_inventory.py deploy-dynamic.yaml"
 
-- name: Kick off the deployment
-  shell: >
-    ansible-playbook -vvvv -i inventory/bifrost_inventory.py deploy-dynamic.yaml
-  args:
-    chdir: /usr/src/bifrost/playbooks
-  environment: "{{ bifrost_env }}"
+#- name: Kick off the deployment
+#  shell: >
+#    ansible-playbook -vvvv -i inventory/bifrost_inventory.py deploy-dynamic.yaml
+#  args:
+#    chdir: /usr/src/bifrost/playbooks
+#  environment: "{{ bifrost_env }}"
 
 
 # - debug: "msg={{ enrolled_inventory.stdout }}"

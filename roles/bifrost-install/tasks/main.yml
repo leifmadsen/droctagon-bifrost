@@ -61,19 +61,22 @@
 - name: Run the env setup script
   shell: >
     bash /usr/src/bifrost/scripts/env-setup.sh
-  args:
-    creates: /etc/.bifrost-env-setup
 
-- name: Mark env setup complete
-  file:
-    path: /etc/.bifrost-env-setup
-    state: directory
+- name: Make sure we have the venv setup
+  stat:
+    path: /opt/stack/bifrost/bin/activate
+  register: bifrost_venv
+
+- name: Fail if we don't have a venv
+  fail:
+    msg: VENV didn't get setup properly
+  when: not bifrost_venv.stat.exists
 
 - name: Annnnd! We run the installation playbook.
   shell: >
     source /opt/stack/bifrost/bin/activate && \
     source /usr/src/bifrost/env-vars && \
-    /root/.local/bin/ansible-playbook -i inventory/target install.yaml
+    /opt/stack/bifrost/bin/ansible-playbook -i inventory/target install.yaml
   args:
     chdir: /usr/src/bifrost/playbooks
     creates: /etc/.bifrost-installed
