@@ -28,9 +28,11 @@
       "ram": "{{ inv.memory }}",
       "disk_size": "{{ inv.disk }}",
       "cpus": "{{ inv.cpu }}",
+      {% if inv.root_device is defined and inv.root_device_type is defined %}
       "root_device": {
         "{{ inv.root_device_type }}": "{{ inv.root_device }}"
       }
+      {% endif %}
     },
     "name": "{{ inv.nickname }}"
   }{% if not loop.last %},

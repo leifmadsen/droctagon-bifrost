@@ -7,8 +7,12 @@
         IRONIC_URL: "http://localhost:6385/"
         OS_AUTH_TOKEN: "fake-token"
         BIFROST_INVENTORY_SOURCE: "{{ bifrost_inventory_path }}"
+
+  environment:
+    VENV: /opt/stack/bifrost
+
   tasks: []
   roles:
-    # - { role: bifrost-install }
+    - { role: bifrost-install }
     - { role: bifrost-postinstall }
     - { role: bifrost-inventory }

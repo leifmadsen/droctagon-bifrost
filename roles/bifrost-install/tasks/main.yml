@@ -4,23 +4,34 @@
 # ...up to the end of the "installation" section.
 
 - name: Enable EPEL
-  yum:
+  package:
     name: epel-release
     state: present
 
-- name: Install deps
-  yum: 
+- name: Install dependencies
+  package:
     name: "{{ item }}"
     state: present
   with_items:
     - git
     - mlocate
+    - ntp
+
+- name: Update time with ntp
+  command: ntpdate pool.ntp.org
+  ignore_errors: true
+
+- name: Start and enable NTP daemon
+  systemd:
+    name: ntpd
+    state: started
+    enabled: true
 
 - name: Disable selinux
   selinux:
     state: disabled
 
-- name: Generate a an SSH key for root
+- name: Generate an SSH key for root
   user:
     name: root
     generate_ssh_key: yes
@@ -50,33 +61,27 @@
 - name: Run the env setup script
   shell: >
     bash /usr/src/bifrost/scripts/env-setup.sh
-  args:
-    creates: /etc/.bifrost-env-setup
 
-- name: Mark env setup complete
-  file: 
-    path: /etc/.bifrost-env-setup
-    state: directory
+- name: Make sure we have the venv setup
+  stat:
+    path: /opt/stack/bifrost/bin/activate
+  register: bifrost_venv
 
-- name: Source ansible env-setup
-  shell: >
-    source /opt/stack/ansible/hacking/env-setup
-  args:
-    creates: /etc/.ansible-env-setup
-
-- name: Mark env setup complete
-  file: 
-    path: /etc/.ansible-env-setup
-    state: directory
+- name: Fail if we don't have a venv
+  fail:
+    msg: VENV didn't get setup properly
+  when: not bifrost_venv.stat.exists
 
 - name: Annnnd! We run the installation playbook.
   shell: >
-    ansible-playbook -i inventory/target install.yaml
+    source /opt/stack/bifrost/bin/activate && \
+    source /usr/src/bifrost/env-vars && \
+    /opt/stack/bifrost/bin/ansible-playbook -i inventory/target install.yaml
   args:
     chdir: /usr/src/bifrost/playbooks
     creates: /etc/.bifrost-installed
 
 - name: Mark bifrost install complete
-  file: 
+  file:
     path: /etc/.bifrost-installed
     state: directory
