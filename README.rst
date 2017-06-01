@@ -1,12 +1,15 @@
 droctagon-bifrost
 =================
 
-This is an Ansible playbook (and roles) for spinning up Bifrost on a machine to
-act as a machine to pxe boot baremetal machines and then bootstrap them with an
-O/S.
+This is an Ansible playbook (and roles) for spinning up Bifrost.
+
+Bifrost is a system that leverages Ironic to bootstrap baremetal machines 
+using PXE booting and installing an operating system via disk image.
 
 Bifrost itself is also an Ansible playbook, but, it requires some tweaks that
-are both not trivial, and further setup on the components that comprise 
+are both not trivial. Use of this playbook helps to bootstrap some of the
+configuration of Bifrost itself and provides an example configuration for your
+network.
 
 Usage
 -----
