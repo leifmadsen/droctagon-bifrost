@@ -40,4 +40,9 @@ Dr Octagon
 This playbook is part of the Dr. Octagon Lab, a series of tools to manage a
 laboratory for NFV on OpenShift and OpenStack.
 
-![Dr. Octagon NFV Laboratory](http://i.imgur.com/lQOHIBC.png)
+.. class:: no-web
+
+    .. image:: http://i.imgur.com/lQOHIBC.png
+        :alt: Dr. Octagon NFV Laboratory
+        :width: 100%
+        :align: center
