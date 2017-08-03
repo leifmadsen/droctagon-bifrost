@@ -45,7 +45,7 @@
 
 - name: Clone bifrost
   git:
-    repo: https://git.openstack.org/openstack/bifrost.git
+    repo: "{{ bifrost_repo }}"
     dest: /usr/src/bifrost
     version: "{{ bifrost_version }}"
 
@@ -57,6 +57,16 @@
     - baremetal
     - localhost
     - target
+
+- name: Make sure our Python dependencies are active
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - python
+    - python-devel
+    - python-pip
+    - python-virtualenv
 
 - name: Run the env setup script
   shell: >
