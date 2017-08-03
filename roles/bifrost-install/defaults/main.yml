@@ -3,3 +3,4 @@ ironic_db_password: ironic_welcome
 mysql_username: root
 mysql_password:
 bifrost_version: "master"
+bifrost_repo: https://git.openstack.org/openstack/bifrost.git

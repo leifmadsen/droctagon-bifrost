@@ -1,5 +1,7 @@
 ---
 - hosts: bifrost
+  become: true
+  become_user: root
   vars_files:
     - vars/bifrost.yml
   vars:
