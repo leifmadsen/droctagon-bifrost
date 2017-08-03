@@ -1,12 +1,13 @@
 ---
 - name: template bifrost-inventory.json
-  template: 
+  template:
     src: bifrost-inventory.json.j2
     dest: "{{ bifrost_inventory_path }}"
 
 # Unsure if I'll really need this, but, for now.
 - name: Get enrolled inventory
   shell: >
+    source /opt/stack/bifrost/bin/activate && \
     ironic node-list
   environment: "{{ bifrost_env }}"
   register: enrolled_inventory
@@ -22,6 +23,7 @@
 
 - name: Set root device for each inventory item, every time.
   shell: >
+    source /opt/stack/bifrost/bin/activate && \
     ironic node-update {{ item.uuid }} add properties/root_device='{"{{ item.root_device_type }}": "{{ item.root_device }}"}'
   with_items: "{{ bifrost_inventory }}"
   environment: "{{ bifrost_env }}"
