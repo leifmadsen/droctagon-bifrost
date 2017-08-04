@@ -11,7 +11,7 @@
         BIFROST_INVENTORY_SOURCE: "{{ bifrost_inventory_path }}"
 
   environment:
-    VENV: /opt/stack/bifrost
+    VENV: "{{ bifrost_venv_path }}"
 
   tasks: []
   roles:
