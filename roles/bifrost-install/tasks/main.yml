@@ -3,11 +3,6 @@
 # http://docs.openstack.org/developer/bifrost/readme.html
 # ...up to the end of the "installation" section.
 
-- name: Enable EPEL
-  package:
-    name: epel-release
-    state: present
-
 - name: Install dependencies
   package:
     name: "{{ item }}"
@@ -17,9 +12,16 @@
     - mlocate
     - ntp
 
+- name: Check if NTP daemon is running
+  command: systemctl status ntpd
+  ignore_errors: true
+  changed_when: false
+  register: service_ntpd_status
+
 - name: Update time with ntp
   command: ntpdate pool.ntp.org
   ignore_errors: true
+  when: service_ntpd_status | failed
 
 - name: Start and enable NTP daemon
   systemd:
@@ -27,71 +29,44 @@
     state: started
     enabled: true
 
-- name: Disable selinux
+- name: Disable SElinux
   selinux:
     state: disabled
 
-- name: Generate an SSH key for root
-  user:
-    name: root
-    generate_ssh_key: yes
-    ssh_key_bits: 2048
-    ssh_key_file: .ssh/id_rsa
-
 - name: Wipe bifrost clone
   file:
-    path: /usr/src/bifrost
+    path: "{{ bifrost_repo_path }}"
     state: absent
 
 - name: Clone bifrost
   git:
     repo: "{{ bifrost_repo }}"
-    dest: /usr/src/bifrost
+    dest: "{{ bifrost_repo_path }}"
     version: "{{ bifrost_version }}"
 
 - name: Template group vars
   template:
     src: "group_vars.{{ item }}.j2"
-    dest: "/usr/src/bifrost/playbooks/inventory/group_vars/{{ item }}"
+    dest: "{{ bifrost_repo_path }}/playbooks/inventory/group_vars/{{ item }}"
   with_items:
     - baremetal
     - localhost
     - target
 
-- name: Make sure our Python dependencies are active
-  package:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - python
-    - python-devel
-    - python-pip
-    - python-virtualenv
-
 - name: Run the env setup script
   shell: >
-    bash /usr/src/bifrost/scripts/env-setup.sh
-
-- name: Make sure we have the venv setup
-  stat:
-    path: /opt/stack/bifrost/bin/activate
-  register: bifrost_venv
-
-- name: Fail if we don't have a venv
-  fail:
-    msg: VENV didn't get setup properly
-  when: not bifrost_venv.stat.exists
+    bash {{ bifrost_repo_path }}/scripts/env-setup.sh
 
 - name: Annnnd! We run the installation playbook.
   shell: >
-    source /opt/stack/bifrost/bin/activate && \
-    source /usr/src/bifrost/env-vars && \
-    /opt/stack/bifrost/bin/ansible-playbook -i inventory/target install.yaml
+    {{ bifrost_venv_path }}/bin/ansible-playbook -i inventory/target install.yaml
   args:
-    chdir: /usr/src/bifrost/playbooks
-    creates: /etc/.bifrost-installed
+    chdir: "{{ bifrost_repo_path }}/playbooks"
+    creates: "{{ bifrost_repo_path }}/.bifrost-installed"
+  tags:
+    - remote_deploy
 
 - name: Mark bifrost install complete
   file:
-    path: /etc/.bifrost-installed
+    path: "{{ bifrost_repo_path }}/.bifrost-installed"
     state: directory
