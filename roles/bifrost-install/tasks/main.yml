@@ -11,6 +11,19 @@
     - git
     - mlocate
     - ntp
+    - epel-release
+
+# grrrr at lack of cache update
+- name: Install Python and Ansible
+  yum:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - python
+    - python-devel
+    - python-pip
+    - ansible
 
 - name: Check if NTP daemon is running
   command: systemctl status ntpd
@@ -53,13 +66,15 @@
     - localhost
     - target
 
-- name: Run the env setup script
-  shell: >
-    bash {{ bifrost_repo_path }}/scripts/env-setup.sh
+# TODO: this should be removed after this is merged: https://review.openstack.org/#/c/471750
+- name: Upgrade setuptools with pip
+  pip:
+    name: setuptools
+    extra_args: --upgrade
 
 - name: Annnnd! We run the installation playbook.
   shell: >
-    {{ bifrost_venv_path }}/bin/ansible-playbook -i inventory/target install.yaml
+    ansible-playbook -i inventory/target install.yaml
   args:
     chdir: "{{ bifrost_repo_path }}/playbooks"
     creates: "{{ bifrost_repo_path }}/.bifrost-installed"

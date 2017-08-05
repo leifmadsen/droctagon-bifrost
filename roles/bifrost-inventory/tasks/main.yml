@@ -13,7 +13,7 @@
 
 - name: Start enrollment, enroll everything every time.
   shell: >
-    {{ bifrost_venv_path }}/bin/ansible-playbook -i inventory/bifrost_inventory.py enroll-dynamic.yaml
+    ansible-playbook -i inventory/bifrost_inventory.py enroll-dynamic.yaml
   args:
     chdir: "{{ bifrost_repo_path }}/playbooks"
   environment: "{{ bifrost_env }}"
@@ -23,3 +23,4 @@
     ironic node-update {{ item.uuid }} add properties/root_device='{"{{ item.root_device_type }}": "{{ item.root_device }}"}'
   with_items: "{{ bifrost_inventory }}"
   environment: "{{ bifrost_env }}"
+  when: item.root_device_type is defined and item.root_device is defined
