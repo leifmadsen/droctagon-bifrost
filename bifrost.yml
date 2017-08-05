@@ -10,9 +10,6 @@
         OS_AUTH_TOKEN: "fake-token"
         BIFROST_INVENTORY_SOURCE: "{{ bifrost_inventory_path }}"
 
-  environment:
-    VENV: "{{ bifrost_venv_path }}"
-
   tasks: []
   roles:
     - { role: bifrost-install }

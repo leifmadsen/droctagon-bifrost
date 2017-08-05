@@ -1,4 +1,3 @@
 bifrost: true
 bifrost_repo_path: /opt/bifrost
-bifrost_venv_path: /opt/stack/bifrost
 bifrost_inventory_path: /opt/inventory
