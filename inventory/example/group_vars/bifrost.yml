@@ -3,7 +3,7 @@ pxe_boot_nic: "eth1"
 pxe_boot_server_ip: "172.16.200.41"
 pxe_dhcp_start: 172.16.200.64
 pxe_dhcp_end: 172.16.200.95
-bifrost_inventory: 
+bifrost_inventory:
   - pm_addr: 172.16.200.21
     nickname: "pentagon01"
     mac: "d0:50:99:79:77:aa"
@@ -13,7 +13,7 @@ bifrost_inventory:
     arch: x86_64
     pm_user: admin
     pm_password: admin
-    uuid: 9e9c3031-2200-4a5a-a772-843780f40079
+    uuid: "{{ 1721620021 | random | to_uuid }}"
     #root_device_type: "model"
     # WDC WD1003FBYX-01Y7B0
     #root_device: "WDC WD1003FBYX-0"
@@ -28,7 +28,7 @@ bifrost_inventory:
     pm_user: admin
     pm_password: admin
     # ip_address: 192.168.1.156
-    uuid: 4df31443-763d-43de-a4fe-2a0e6aa68679
+    uuid: "{{ 1721620022 | random | to_uuid }}"
     #root_device_type: "model"
     # Full device line in bios was: "SanDisk SD6SB1M064G1022I"
     #root_device: "SanDisk SD6SB1M0"
@@ -44,13 +44,13 @@ bifrost_inventory:
     pm_user: admin
     pm_password: admin
     # ip_address: 192.168.1.155
-    uuid: 59177aad-d8be-4ce1-968b-9bc4718c5533
+    uuid: "{{ 1721620023 | random | to_uuid }}"
     #root_device_type: "model"
     #root_device: "Crucial_CT256M55"
     # custom_image: true
 
   # # ------------------------------- undercloud.
-  # [root@nocbox playbooks]# lsblk -okname,serial,wwn 
+  # [root@nocbox playbooks]# lsblk -okname,serial,wwn
   # KNAME SERIAL               WWN
   # sda   PNY39162193120100D68 0x5f8db4c391600d68
   # sda1                       0x5f8db4c391600d68
@@ -58,11 +58,11 @@ bifrost_inventory:
   # sda3                       0x5f8db4c391600d68
   # sda4                       0x5f8db4c391600d68
   # sda5                       0x5f8db4c391600d68
-  # sdb   373BA38F             
-  # sdb1                       
-  # sdb2                       
+  # sdb   373BA38F
+  # sdb1
+  # sdb2
 
-  # # - pm_addr: 192.168.1.13 
+  # # - pm_addr: 192.168.1.13
   # #   mac: "00:25:90:2F:03:DC"
   # #   cpu: 2
   # #   memory: 48130
@@ -71,7 +71,7 @@ bifrost_inventory:
   # #   pm_user: stack
   # #   pm_password: redhatz
 
-  # - pm_addr: 192.168.1.14 
+  # - pm_addr: 192.168.1.14
   #   mac: "00:25:90:2F:0A:9C"
   #   cpu: 2
   #   memory: 48130
@@ -81,7 +81,7 @@ bifrost_inventory:
   #   pm_password: redhatz
   #   capabilities: "profile:ceph-storage,boot_option:local"
 
-  # - pm_addr: 192.168.1.15 
+  # - pm_addr: 192.168.1.15
   #   mac: "00:25:90:2F:0A:DA"
   #   cpu: 2
   #   memory: 48130
@@ -91,7 +91,7 @@ bifrost_inventory:
   #   pm_password: redhatz
   #   capabilities: "profile:control,boot_option:local"
 
-  # - pm_addr: 192.168.1.16 
+  # - pm_addr: 192.168.1.16
   #   mac: "00:25:90:48:B8:44"
   #   cpu: 2
   #   memory: 48130
@@ -101,7 +101,7 @@ bifrost_inventory:
   #   pm_password: redhatz
   #   capabilities: "profile:compute,boot_option:local"
 
-  # - pm_addr: 192.168.1.17 
+  # - pm_addr: 192.168.1.17
   #   mac: "00:25:90:49:55:A6"
   #   cpu: 2
   #   memory: 48130
